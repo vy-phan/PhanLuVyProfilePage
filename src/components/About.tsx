@@ -18,19 +18,19 @@ const About: React.FC = () => {
         {
             school: 'Information Technology College (ITC) - Ho Chi Minh City',
             degree: 'Bachelor',
-            period: '8/2023 - 11/2025',
+            period: '8/2023 - 11/2025 (Expected)',
             gpa: '3.8/4.0',
         },
     ];
 
     const careerGoals: CareerGoal[] = [
         {
-            title: 'Short-term Goal: Full Stack Developer',
-            description: 'Develop comprehensive skills in both Front-end and Back-end technologies, with a focus on modern frameworks like React, Node.js, and cloud services. Aim to build scalable and efficient web applications while staying current with industry best practices.',
+            title: 'Short-term Goal: Backend Developer',
+            description: 'Specialize in backend development with a strong focus on performance optimization, system architecture, and scalability. Aim to master advanced concepts in server-side technologies, database optimization, caching strategies, and microservices architecture while implementing efficient solutions for high-load systems.',
         },
         {
-            title: 'Long-term Goal: Technical Lead',
-            description: 'Evolve into a technical leadership role where I can architect complex systems, mentor junior developers, and drive technological innovation. Focus on developing strong project management skills and deep technical expertise to lead high-performing development teams.',
+            title: 'Long-term Goal: Senior Full Stack Developer',
+            description: 'Advance to a senior-level position with deep expertise in both front-end and back-end technologies. Focus on mastering system architecture, performance optimization, and mentoring other developers while staying at the forefront of emerging technologies and best practices.',
         },
     ];
 
@@ -41,7 +41,7 @@ const About: React.FC = () => {
                     colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
                     animationSpeed={4}
                     showBorder={false}
-                    className="custom-class text-3xl"
+                    className="custom-class text-5xl"
                 >
                     About me
                 </GradientText>

@@ -42,17 +42,17 @@ const Achievement = () => {
         {
             title: '🏆 Second Prize - Web Design Challenge',
             description: 'Showcasing innovative web design solutions',
-            image: '/bia4.jpg'
+            image: '/PhanLuVyProfilePage/bia4.jpg'
         },
         {
             title: '🎤 Software Project Talk Show',
             description: 'Sharing innovative software ideas and solutions with the community',
-            image: '/bia2.jpg'
+            image: '/PhanLuVyProfilePage/bia2.jpg'
         },
         {
             title: '🔔 Golden Bell Challenge - IT Edition',
             description: 'Competitive IT knowledge quiz competition showcasing technical expertise',
-            image: '/bia3.jpg'
+            image: '/PhanLuVyProfilePage/bia3.jpg'
         }
     ];
 

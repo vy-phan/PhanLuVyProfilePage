@@ -77,8 +77,8 @@ const Achievement = () => {
 
             <div className="grid md:grid-cols-1 gap-8 mb-16">
                 <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl p-6 transform hover:scale-105 transition-all duration-300 border border-gray-700/50 hover:border-gray-600/50 shadow-lg hover:shadow-purple-500/10">
-                    <div className="flex">
-                        <div className="flex-1 pr-6 border-r border-gray-700/50">
+                    <div className="flex flex-col md:flex-row">
+                        <div className="flex-1 pb-6 md:pb-0 md:pr-6 border-b md:border-b-0 md:border-r border-gray-700/50">
                             {achievements.slice(0, 2).map((achievement, index) => (
                                 <div key={index} className="mb-6 last:mb-0 group">
                                     <div className="flex items-center gap-4 mb-4">
@@ -90,7 +90,7 @@ const Achievement = () => {
                                 </div>
                             ))}
                         </div>
-                        <div className="flex-1 pl-6">
+                        <div className="flex-1 pt-6 md:pt-0 md:pl-6">
                             {achievements.slice(2).map((achievement, index) => (
                                 <div key={index} className="mb-6 last:mb-0 group">
                                     <div className="flex items-center gap-4 mb-4">

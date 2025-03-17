@@ -124,7 +124,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <header className="sticky top-0 z-10 py-4">
+      <header className="sticky top-0 z-50 py-4 bg-black/80 backdrop-blur-sm border-b border-gray-800/50">
         <Menu />
       </header>
       <main className="container mx-auto px-4 py-8">

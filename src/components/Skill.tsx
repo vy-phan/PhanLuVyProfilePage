@@ -66,18 +66,25 @@ const Skills: React.FC = () => {
   // Check if the screen is mobile size
   useEffect(() => {
     const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768); // 768px is standard tablet breakpoint
+      const width = window.innerWidth;
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isMobileDevice = /iphone|ipod|ipad|android|blackberry|windows phone/i.test(userAgent);
+      setIsMobile(width < 768 || isMobileDevice); // Check both width and device type
     };
     
-    // Initial check
+    // Run initial check immediately
     checkIsMobile();
     
-    // Add event listener for window resize
-    window.addEventListener('resize', checkIsMobile);
+    // Add event listener for resize
+    window.addEventListener('resize', checkIsMobile, { passive: true });
+    
+    // Force a check after a short delay to ensure proper detection
+    const timeoutId = setTimeout(checkIsMobile, 100);
     
     // Cleanup
     return () => {
       window.removeEventListener('resize', checkIsMobile);
+      clearTimeout(timeoutId);
     };
   }, []);
 

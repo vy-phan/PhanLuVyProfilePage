@@ -107,7 +107,7 @@ const Achievement = () => {
             </div>
 
             <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-900 to-gray-800 p-6 border border-gray-700/50">
-                <h3 className="text-2xl font-semibold mb-8 text-center">Recent Activities</h3>
+                <h3 className="text-2xl font-semibold mb-8 text-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent animate-gradient">Recent Activities</h3>
 
                 <div className="relative h-[600px] md:h-[500px] overflow-hidden rounded-lg max-w-[1200px] mx-auto">
                     <div

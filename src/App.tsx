@@ -1,12 +1,127 @@
+import React, { useState, useEffect, lazy, Suspense, ReactNode } from "react"
 import Menu from "./components/Menu"
 import Particles from "./components/Particles"
-import Project from "./components/Project"
 import TextPressure from "./components/TextPressure"
-import About from "./components/About"
-import Skills from "./components/Skill"
-import Achievement from "./components/Achievement"
+import ShinyText from "./components/ShinyText"
+
+// Error Boundary component for handling lazy loading errors
+class ErrorBoundary extends React.Component<{children: ReactNode, fallback?: ReactNode}, {hasError: boolean}> {
+  constructor(props: {children: ReactNode, fallback?: ReactNode}) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback || <div className="text-red-500 p-4">Something went wrong loading this section.</div>;
+    }
+    return this.props.children;
+  }
+}
+
+// Lazy load components
+const About = lazy(() => import("./components/About"))
+const Skills = lazy(() => import("./components/Skill"))
+const Experience = lazy(() => import("./components/Experience"))
+const Project = lazy(() => import("./components/Project"))
+const Achievement = lazy(() => import("./components/Achievement"))
+
+// Define types for section visibility state
+interface SectionVisibility {
+  home: boolean;
+  about: boolean;
+  skills: boolean;
+  experience: boolean;
+  projects: boolean;
+  achievements: boolean;
+}
 
 function App() {
+  // State to track which sections are visible
+  const [visibleSections, setVisibleSections] = useState<SectionVisibility>({
+    home: true,
+    about: false,
+    skills: false,
+    experience: false,
+    projects: false,
+    achievements: false
+  })
+
+  useEffect(() => {
+    // Function to check if an element is in viewport
+    const isInViewport = (element: HTMLElement | null): boolean => {
+      if (!element) return false
+      const rect = element.getBoundingClientRect()
+      return (
+        rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.bottom >= 0
+      )
+    }
+
+    // Function to update visible sections with throttling for performance
+    let ticking = false;
+    let updatedVisibility: Partial<SectionVisibility> = {};
+    
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const sections: Record<keyof SectionVisibility, HTMLElement | null> = {
+            home: document.getElementById("home"),
+            about: document.getElementById("about"),
+            skills: document.getElementById("skills"),
+            experience: document.getElementById("experience"),
+            projects: document.getElementById("projects"),
+            achievements: document.getElementById("achievements")
+          }
+
+          updatedVisibility = {}
+          for (const [key, element] of Object.entries(sections)) {
+            updatedVisibility[key as keyof SectionVisibility] = isInViewport(element)
+          }
+          
+          setVisibleSections(prev => {
+            // Only update state if there's a change to prevent unnecessary renders
+            if (JSON.stringify(prev) !== JSON.stringify(updatedVisibility)) {
+              return {...updatedVisibility as SectionVisibility}
+            }
+            return prev
+          })
+          
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    // Add scroll event listener
+    window.addEventListener("scroll", handleScroll)
+    // Initial check
+    handleScroll()
+
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  // Loading spinner component
+  const LoadingSpinner: React.FC = () => (
+    <div className="flex justify-center items-center h-64">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+    </div>
+  )
+  
+  // Error fallback component
+  const ErrorFallback: React.FC = () => (
+    <div className="flex flex-col justify-center items-center h-64 text-red-400">
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+      <p>Failed to load this section. Please refresh the page.</p>
+    </div>
+  )
+
   return (
     <div className="min-h-screen bg-black text-white">
       <header className="sticky top-0 z-10 py-4">
@@ -20,16 +135,16 @@ function App() {
           <div className="relative z-10 flex items-center justify-center h-full w-full">
             <div className="flex flex-col md:flex-row items-center justify-between w-full max-w-4xl gap-8 px-4">
               <div className="flex-1 flex justify-center md:justify-end">
-                <div className="relative w-64 h-64 rounded-full overflow-hidden border-4 border-white/20 shadow-lg shadow-purple-500/20 transition-transform hover:scale-105 duration-300">
+                <div className="relative w-64 h-64 rounded-full overflow-hidden border-4 border-transparent shadow-lg shadow-purple-500/20 transition-transform hover:scale-105 duration-300 before:content-[''] before:absolute before:-inset-1 before:rounded-full before:bg-gradient-to-r before:from-purple-500 before:via-pink-500 before:to-blue-500 before:animate-spin-slow before:z-[-1]">
                   <img
                     src="/avatar.jpg"
                     alt="Avatar"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover rounded-full"
+                    loading="lazy"
                   />
                 </div>
               </div>
               <div className="flex-1 flex flex-col items-center md:items-start">
-                {/* <div style={{ position: 'relative', height: '300px' }}> */}
                 <TextPressure
                   text="Phan Lu Vy"
                   flex={true}
@@ -42,15 +157,9 @@ function App() {
                   strokeColor="#ff0000"
                   minFontSize={36}
                 />
-                {/* </div> */}
                 <p className="text-xl text-gray-300 text-center md:text-left">
-                  Web Developer{" "}
-                  <span className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    phanvy1410205@gmail.com
-                  </span>
+                  Web Developer{" "} <br/>
+                  <ShinyText text="phanvy1410205@gmail.com" disabled={false} speed={5} />
                 </p>
                 <div className="flex gap-6 mt-4">
                   <a
@@ -93,21 +202,45 @@ function App() {
         </section>
 
         <section id="about" className="min-h-screen py-16 flex flex-col gap-16">
-          <div className="flex items-center justify-center">
-            <About />
+          <div id="about-section" className="flex items-center justify-center">
+            <ErrorBoundary fallback={<ErrorFallback />}>
+              <Suspense fallback={<LoadingSpinner />}>
+                {visibleSections.about && <About />}
+              </Suspense>
+            </ErrorBoundary>
           </div>
-          <div className="flex items-center justify-center">
-            <Skills />
+          
+          <div id="skills" className="flex items-center justify-center">
+            <ErrorBoundary fallback={<ErrorFallback />}>
+              <Suspense fallback={<LoadingSpinner />}>
+                {visibleSections.skills && <Skills />}
+              </Suspense>
+            </ErrorBoundary>
+          </div>
+          
+          <div id="experience" className="flex items-center justify-center">
+            <ErrorBoundary fallback={<ErrorFallback />}>
+              <Suspense fallback={<LoadingSpinner />}>
+                {visibleSections.experience && <Experience />}
+              </Suspense>
+            </ErrorBoundary>
           </div>
         </section>
 
-
         <section id="projects" className="min-h-screen flex items-center justify-center">
-          <Project />
+          <ErrorBoundary fallback={<ErrorFallback />}>
+            <Suspense fallback={<LoadingSpinner />}>
+              {visibleSections.projects && <Project />}
+            </Suspense>
+          </ErrorBoundary>
         </section>
 
         <section id="achievements" className="min-h-screen flex items-center justify-center">
-          <Achievement />
+          <ErrorBoundary fallback={<ErrorFallback />}>
+            <Suspense fallback={<LoadingSpinner />}>
+              {visibleSections.achievements && <Achievement />}
+            </Suspense>
+          </ErrorBoundary>
         </section>
       </main>
     </div>

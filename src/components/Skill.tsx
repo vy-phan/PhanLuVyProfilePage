@@ -1,5 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import GradientText from './GradientText';
+import SkillDesktop from './SkillDesktop';
+import SkillMobile from './Skillmobile';
+
 
 interface SkillCategory {
   title: string;
@@ -13,8 +16,9 @@ interface Skill {
 }
 
 const Skills: React.FC = () => {
-  const skillsRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
+  // Skills data
   const skills: Skill[] = [
     { name: 'HTML', icon: '/html.svg' },
     { name: 'CSS3', icon: '/css.svg' },
@@ -32,71 +36,7 @@ const Skills: React.FC = () => {
     { name: 'Github', icon: '/github.svg' },
   ];
 
-  useEffect(() => {
-    const scrollContainer = skillsRef.current;
-    if (!scrollContainer) return;
-
-    // Clone items for infinite scroll effect
-    const skillsContent = scrollContainer.querySelector('.skills-content') as HTMLElement;
-    if (!skillsContent) return;
-
-    const clone = skillsContent.cloneNode(true) as HTMLElement;
-    clone.style.marginLeft = '2rem';
-    scrollContainer.appendChild(clone);
-
-    let animationId: number | null = null;
-    let scrollPosition = 0;
-    const scrollSpeed = 0.5; // Adjust speed here
-
-    // Animation function
-    const animate = () => {
-      if (!scrollContainer) return;
-
-      scrollPosition += scrollSpeed;
-
-      // Reset position when first set of items is fully scrolled
-      if (scrollPosition >= skillsContent.offsetWidth) {
-        // Smoothly reset to beginning
-        scrollPosition = 0;
-        scrollContainer.scrollLeft = 0;
-      } else {
-        scrollContainer.scrollLeft = scrollPosition;
-      }
-
-      animationId = requestAnimationFrame(animate);
-    };
-
-    // Start animation
-    animationId = requestAnimationFrame(animate);
-
-    // Pause animation on hover
-    const handleMouseEnter = () => {
-      if (animationId !== null) {
-        cancelAnimationFrame(animationId);
-        animationId = null;
-      }
-    };
-
-    const handleMouseLeave = () => {
-      if (animationId === null) {
-        animationId = requestAnimationFrame(animate);
-      }
-    };
-
-    scrollContainer.addEventListener('mouseenter', handleMouseEnter);
-    scrollContainer.addEventListener('mouseleave', handleMouseLeave);
-
-    return () => {
-      if (animationId !== null) {
-        cancelAnimationFrame(animationId);
-      }
-      scrollContainer.removeEventListener('mouseenter', handleMouseEnter);
-      scrollContainer.removeEventListener('mouseleave', handleMouseLeave);
-    };
-  }, []);
-
-  const [activeCategory, setActiveCategory] = useState<number | null>(null);
-
+  // Skill categories data
   const skillCategories: SkillCategory[] = [
     {
       title: "Web Development",
@@ -123,9 +63,23 @@ const Skills: React.FC = () => {
     },
   ];
 
-  const toggleCategory = (index: number) => {
-    setActiveCategory(activeCategory === index ? null : index);
-  };
+  // Check if the screen is mobile size
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768); // 768px is standard tablet breakpoint
+    };
+    
+    // Initial check
+    checkIsMobile();
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', checkIsMobile);
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', checkIsMobile);
+    };
+  }, []);
 
   return (
     <section className="py-16">
@@ -134,83 +88,16 @@ const Skills: React.FC = () => {
           colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
           animationSpeed={4}
           showBorder={false}
-          className="custom-class text-5xl font-medium"
+          className="custom-class text-4xl sm:text-5xl font-medium"
         >
           Skills
         </GradientText>
 
-        <div
-          ref={skillsRef}
-          className="overflow-hidden mt-3 whitespace-nowrap relative cursor-pointer bg-gradient-to-b from-gray-900 to-gray-800 rounded-3xl p-6"
-          style={{ height: '120px' }}
-        >
-          <div className="skills-content inline-block px-8">
-            {skills.map((skill, index) => (
-              <div
-                key={index}
-                className="inline-block mx-8 transition-all duration-500 hover:scale-110 hover:-translate-y-3 hover:rotate-3"
-              >
-                <div className="flex flex-col items-center">
-                  <div className="p-4 bg-gradient-to-br from-gray-800 to-gray-700 rounded-2xl shadow-lg mb-3 backdrop-blur-sm border border-gray-700/50 hover:border-gray-600/50 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/10">
-                    <img
-                      src={skill.icon}
-                      alt={`${skill.name} logo`}
-                      className="h-14 w-14 object-contain filter drop-shadow-lg"
-                    />
-                  </div>
-                  <span className="text-sm font-medium text-gray-300 tracking-wide">{skill.name}</span>
-                </div>
-              </div>
-            ))}
-            <div className="inline-block w-16">
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-16 space-y-4">
-          {skillCategories.map((category, index) => (
-            <div
-              key={index}
-              className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl overflow-hidden border border-gray-700/50 transition-all duration-300 hover:border-gray-600/50"
-            >
-              <button
-                onClick={() => toggleCategory(index)}
-                className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-800/50 transition-colors duration-300"
-              >
-                <div>
-                  <h3 className="text-xl font-semibold text-white">{category.title}</h3>
-                  <p className="text-gray-400 text-sm mt-1">{category.description}</p>
-                </div>
-                <span
-                  className={`transform transition-transform duration-300 ${
-                    activeCategory === index ? 'rotate-180' : ''
-                  }`}
-                >
-                  ▼
-                </span>
-              </button>
-              <div
-                className={`overflow-hidden transition-all duration-300 ${
-                  activeCategory === index ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
-                }`}
-              >
-                <div className="px-6 py-4 bg-black/20">
-                  <ul className="space-y-3">
-                    {category.capabilities.map((capability, capIndex) => (
-                      <li
-                        key={capIndex}
-                        className="flex items-start gap-2 text-gray-300 hover:text-white transition-colors duration-200"
-                      >
-                        <span className="text-[#40ffaa] mt-1">•</span>
-                        {capability}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        {isMobile ? (
+          <SkillMobile skills={skills} skillCategories={skillCategories} />
+        ) : (
+          <SkillDesktop skills={skills} skillCategories={skillCategories} />
+        )}
       </div>
     </section>
   );

@@ -47,7 +47,7 @@ const Experience: React.FC = () => {
 
   return (
     <section className="py-16">
-      <div className="container mx-auto px-4">
+      <div className={`container mx-auto px-4 ${isMobile ? 'space-y-6' : 'space-y-8'}`}>
         <GradientText
           colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
           animationSpeed={4}

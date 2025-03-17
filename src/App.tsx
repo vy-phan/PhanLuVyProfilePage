@@ -137,7 +137,7 @@ function App() {
               <div className="flex-1 flex justify-center md:justify-end">
                 <div className="relative w-64 h-64 rounded-full overflow-hidden border-4 border-transparent shadow-lg shadow-purple-500/20 transition-transform hover:scale-105 duration-300 before:content-[''] before:absolute before:-inset-1 before:rounded-full before:bg-gradient-to-r before:from-purple-500 before:via-pink-500 before:to-blue-500 before:animate-spin-slow before:z-[-1]">
                   <img
-                    src="/avatar.jpg"
+                    src="/PhanLuVyProfilePage/avatar.jpg"
                     alt="Avatar"
                     className="w-full h-full object-cover rounded-full"
                     loading="lazy"

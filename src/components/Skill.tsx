@@ -20,20 +20,20 @@ const Skills: React.FC = () => {
 
   // Skills data
   const skills: Skill[] = [
-    { name: 'HTML', icon: '/html.svg' },
-    { name: 'CSS3', icon: '/css.svg' },
-    { name: 'JavaScript', icon: '/js.svg' },
-    { name: 'TypeScript', icon: '/ts.svg' },
-    { name: 'PHP', icon: '/php.svg' },
-    { name: 'Python', icon: '/python.svg' },
-    { name: 'NodeJS', icon: '/nodejs.svg' },
-    { name: 'Laravel', icon: '/laravel.svg' },
-    { name: 'React', icon: '/react.svg' },
-    { name: 'Angular', icon: '/angular.svg' },
-    { name: 'NextJS', icon: '/nextjs.svg' },
-    { name: 'MongoDB', icon: '/mongo.svg' },
-    { name: 'Tailwind CSS', icon: '/tailwind.svg' },
-    { name: 'Github', icon: '/github.svg' },
+    { name: 'HTML', icon: '/PhanLuVyProfilePage/html.svg' },
+    { name: 'CSS3', icon: '/PhanLuVyProfilePage/css.svg' },
+    { name: 'JavaScript', icon: '/PhanLuVyProfilePage/js.svg' },
+    { name: 'TypeScript', icon: '/PhanLuVyProfilePage/ts.svg' },
+    { name: 'PHP', icon: '/PhanLuVyProfilePage/php.svg' },
+    { name: 'Python', icon: '/PhanLuVyProfilePage/python.svg' },
+    { name: 'NodeJS', icon: '/PhanLuVyProfilePage/nodejs.svg' },
+    { name: 'Laravel', icon: '/PhanLuVyProfilePage/laravel.svg' },
+    { name: 'React', icon: '/PhanLuVyProfilePage/react.svg' },
+    { name: 'Angular', icon: '/PhanLuVyProfilePage/angular.svg' },
+    { name: 'NextJS', icon: '/PhanLuVyProfilePage/nextjs.svg' },
+    { name: 'MongoDB', icon: '/PhanLuVyProfilePage/mongo.svg' },
+    { name: 'Tailwind CSS', icon: '/PhanLuVyProfilePage/tailwind.svg' },
+    { name: 'Github', icon: '/PhanLuVyProfilePage/github.svg' },
   ];
 
   // Skill categories data
